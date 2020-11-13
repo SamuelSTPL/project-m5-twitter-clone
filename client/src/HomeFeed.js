@@ -1,5 +1,17 @@
-import React from "react";
+import styled from "styled-components";
+import { NewTweet } from "./NewTweet";
+import { TweetFeeds } from "./TweetFeeds";
+
+const Wrapper = styled.div`
+  max-width: 70%;
+  margin: 0 auto;
+`;
 
 export const HomeFeed = () => {
-  return <div>Home Feed</div>;
+  return (
+    <Wrapper>
+      <NewTweet />
+      <TweetFeeds />
+    </Wrapper>
+  );
 };

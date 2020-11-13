@@ -1,7 +1,7 @@
-const data = require('../data');
+const data = require("../data");
 
 // HARDCODED CURRENT USER.
-const CURRENT_USER_HANDLE = 'treasurymog';
+const CURRENT_USER_HANDLE = "treasurymog";
 
 const MAX_DELAY = 2000;
 const FAILURE_ODDS = 0.05;
@@ -27,14 +27,29 @@ const simulateProblems = (res, data) => {
   }, delay);
 };
 
-const getUser = handle => {
+const simulatePostError = (res, data) => {
+  const delay = Math.random() * MAX_DELAY;
+
+  setTimeout(() => {
+    // const shouldError = true
+
+    if (true) {
+      res.sendStatus(500);
+      return;
+    }
+
+    res.json(data);
+  }, delay);
+};
+
+const getUser = (handle) => {
   return data.users[handle.toLowerCase()];
 };
-const getUserProfile = handle => {
+const getUserProfile = (handle) => {
   const user = getUser(handle);
 
   if (!user) {
-    throw new Error('user-not-found');
+    throw new Error("user-not-found");
   }
 
   const currentUser = data.users[CURRENT_USER_HANDLE];
@@ -56,7 +71,7 @@ const getUserProfile = handle => {
   return mutableUser;
 };
 
-const resolveRetweet = tweet => {
+const resolveRetweet = (tweet) => {
   if (!tweet.retweetOf) {
     return tweet;
   }
@@ -73,7 +88,7 @@ const resolveRetweet = tweet => {
   };
 };
 
-const denormalizeTweet = tweet => {
+const denormalizeTweet = (tweet) => {
   const tweetCopy = { ...tweet };
 
   delete tweetCopy.authorHandle;
@@ -91,9 +106,11 @@ const denormalizeTweet = tweet => {
   return tweetCopy;
 };
 
-const getTweetsFromUser = userId => {
+const getTweetsFromUser = (userId) => {
   return Object.values(data.tweets)
-    .filter(tweet => tweet.authorHandle.toLowerCase() === userId.toLowerCase())
+    .filter(
+      (tweet) => tweet.authorHandle.toLowerCase() === userId.toLowerCase()
+    )
     .map(resolveRetweet)
     .map(denormalizeTweet);
 };
@@ -116,12 +133,12 @@ const duplicateTweetReducer = (acc, tweet, index, allTweets) => {
   return [...acc, tweet];
 };
 
-const getTweetsForUser = userId => {
+const getTweetsForUser = (userId) => {
   const user = data.users[userId];
 
   return Object.values(data.tweets)
     .filter(
-      tweet =>
+      (tweet) =>
         user.followingIds.includes(tweet.authorHandle.toLowerCase()) ||
         tweet.authorHandle.toLowerCase() === CURRENT_USER_HANDLE.toLowerCase()
     )
@@ -139,4 +156,5 @@ module.exports = {
   denormalizeTweet,
   getTweetsFromUser,
   getTweetsForUser,
+  simulatePostError,
 };
