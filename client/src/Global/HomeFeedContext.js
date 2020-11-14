@@ -39,13 +39,13 @@ export const HomeFeedProvider = ({ children }) => {
         setRemainingLetters(280);
       } else {
         setTweetPostError(true);
-        console.log(response.status, response.statusText, response.url);
+        // console.log(response.status, response.statusText, response.url);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(tweetPostError);
+  // console.log(tweetPostError);
 
   //Fetch the home feed data
   const fetchHomeFeedData = async () => {

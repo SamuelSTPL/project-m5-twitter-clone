@@ -6,7 +6,7 @@ import { TweetActions } from "./Global/TweetActions";
 import { Loading } from "./Global/Loading";
 import { Icon } from "react-icons-kit";
 import { u1F63F } from "react-icons-kit/noto_emoji_regular/u1F63F";
-
+import moment from "moment";
 export const TweetFeeds = () => {
   const { homeFeed, hasEncounteredIternalError } = useContext(HomeFeedContext);
   let history = useHistory();
@@ -35,6 +35,8 @@ export const TweetFeeds = () => {
       .reverse()
       .map((tweetId) => {
         const tweet = homeFeed[tweetId];
+        const newTimestamp = moment(tweet.timestamp).format("MMM DD");
+        // console.log(newTimestamp);
         if (!tweet) return;
         return (
           <Wrapper
@@ -47,7 +49,7 @@ export const TweetFeeds = () => {
             <AvatarImg src={tweet.author.avatarSrc} alt="Author of the tweet" />
             <Content>
               <Top>
-                <button
+                <LinkToProfileButton
                   onClick={(e) => {
                     e.stopPropagation();
                     handleUserNameClick(tweet.author.handle);
@@ -55,9 +57,9 @@ export const TweetFeeds = () => {
                   aria-label="Link to user profile    "
                 >
                   <DisplayName>{tweet.author.displayName}</DisplayName>
-                </button>
+                </LinkToProfileButton>
                 <p>@{tweet.author.handle}</p>
-                <p>{tweet.timestamp}</p>
+                <TimeStamp>{newTimestamp}</TimeStamp>
               </Top>
               <h4>{tweet.status}</h4>
               {tweet.media[0] && <Img src={tweet.media[0].url} />}
@@ -85,23 +87,46 @@ const Wrapper = styled.div`
 const Img = styled.img`
   max-width: 100%;
   border-radius: 20px;
+  margin-top: 15px;
 `;
 
 const AvatarImg = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  margin-right: 10px;
+`;
+
+const LinkToProfileButton = styled.button`
+  background-color: white;
+  border: 0px;
+  margin-right: 5px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DisplayName = styled.span`
   font-size: 1.5rem;
   font-weight: bolder;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const TimeStamp = styled.span`
+  margin-left: 15px;
 `;
 
 const Content = styled.div`
   width: 100%;
 `;
-const Top = styled.div``;
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  color: gray;
+  margin-bottom: 10px;
+`;
 
 const LoadingIcon = styled.div`
   margin-top: 50px;

@@ -62,8 +62,8 @@ router.post("/api/tweet", (req, res) => {
   data.tweets[newTweet.id] = newTweet;
 
   //TO CHANGE ///////////////////////////////////////////
-  // return simulateProblems(res, { tweet: newTweet });
-  return simulatePostError(res, { tweet: newTweet });
+  return simulateProblems(res, { tweet: newTweet });
+  // return simulatePostError(res, { tweet: newTweet });
 });
 
 /**

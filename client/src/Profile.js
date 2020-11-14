@@ -8,6 +8,95 @@ import { ProfileNavBar } from "./ProfileNavBarRendering/ProfileNavBar";
 import { ProfileTweets } from "./ProfileNavBarRendering/ProfileTweets";
 import { ProfileMedias } from "./ProfileNavBarRendering/ProfileMedias";
 import { ProfileLikes } from "./ProfileNavBarRendering/ProfileLikes";
+import { Loading } from "./Global/Loading";
+
+export const Profile = () => {
+  const { currentUser } = useContext(CurrentUserContext);
+  const [userProfileData, setUserProfileData] = useState();
+  const [display, setDisplay] = useState("Tweet");
+  let { profileId } = useParams();
+
+  // console.log(display);
+  const isCurrentUser = currentUser.handle === userProfileData?.handle;
+
+  const query =
+    profileId !== currentUser.handle
+      ? `/api/${profileId}/profile`
+      : `/api/me/profile`;
+
+  const handleFollowButtonClick = () => {
+    userProfileData.isBeingFollowedByYou = true;
+  };
+
+  const fetchOtherUserProfileData = async () => {
+    try {
+      const response = await fetch(query);
+      const data = await response.json();
+      setUserProfileData(data.profile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log(userProfileData);
+
+  useEffect(() => {
+    fetchOtherUserProfileData();
+  }, [profileId]);
+
+  return (
+    <>
+      {userProfileData ? (
+        <ProfileWrapper>
+          <BannerImg src={userProfileData.bannerSrc} />
+          <ProfileImg src={userProfileData.avatarSrc} />
+          {!isCurrentUser && userProfileData.isBeingFollowedByYou ? (
+            <FollowButton onClick={(e) => handleFollowButtonClick()}>
+              Follow
+            </FollowButton>
+          ) : (
+            <Following>Following</Following>
+          )}
+          <InfosDisplay>
+            <Name>{userProfileData.displayName}</Name>
+            <HandleAndFollowsYouWrapper>
+              @{userProfileData.handle}
+              {userProfileData.isFollowingYou && (
+                <FollowsYou>Follows you</FollowsYou>
+              )}
+            </HandleAndFollowsYouWrapper>
+            <Status>{userProfileData.bio}</Status>
+            <LocationAndDateWrapper>
+              <div>
+                <FiMapPin /> {userProfileData.location}
+              </div>
+              <DateJoined>
+                <FiCalendar /> {userProfileData.joined}
+              </DateJoined>
+            </LocationAndDateWrapper>
+            <NumFollowsAndFollowersWrapper>
+              <div>
+                <BoldSpan>{userProfileData.numFollowing}</BoldSpan> Following
+              </div>
+              <NumFollowers>
+                <BoldSpan>{userProfileData.numFollowers}</BoldSpan> Followers
+              </NumFollowers>
+            </NumFollowsAndFollowersWrapper>
+          </InfosDisplay>
+          <ProfileNavBar setDisplay={setDisplay} />
+          <NavbarRendering>
+            {display === "Tweet" && <ProfileTweets profileId={profileId} />}
+            {display === "Media" && <ProfileMedias />}
+            {display === "Likes" && <ProfileLikes />}
+          </NavbarRendering>
+        </ProfileWrapper>
+      ) : (
+        <LoadingDiv>
+          <Loading />
+        </LoadingDiv>
+      )}
+    </>
+  );
+};
 
 const ProfileWrapper = styled.div`
   position: relative;
@@ -114,88 +203,9 @@ const NavbarRendering = styled.div`
   padding: 5px;
 `;
 
-export const Profile = () => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const [userProfileData, setUserProfileData] = useState();
-  const [display, setDisplay] = useState("Tweet");
-  let { profileId } = useParams();
-
-  // console.log(display);
-  const isCurrentUser = currentUser.handle === userProfileData?.handle;
-
-  const query =
-    profileId !== currentUser.handle
-      ? `/api/${profileId}/profile`
-      : `/api/me/profile`;
-
-  const handleFollowButtonClick = () => {
-    userProfileData.isBeingFollowedByYou = true;
-  };
-
-  const fetchOtherUserProfileData = async () => {
-    try {
-      const response = await fetch(query);
-      const data = await response.json();
-      setUserProfileData(data.profile);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // console.log(userProfileData);
-
-  useEffect(() => {
-    fetchOtherUserProfileData();
-  }, [profileId]);
-
-  return (
-    <>
-      {userProfileData ? (
-        <ProfileWrapper>
-          <BannerImg src={userProfileData.bannerSrc} />
-          <ProfileImg src={userProfileData.avatarSrc} />
-          {!isCurrentUser && userProfileData.isBeingFollowedByYou ? (
-            <FollowButton onClick={(e) => handleFollowButtonClick()}>
-              Follow
-            </FollowButton>
-          ) : (
-            <Following>Following</Following>
-          )}
-          <InfosDisplay>
-            <Name>{userProfileData.displayName}</Name>
-            <HandleAndFollowsYouWrapper>
-              @{userProfileData.handle}
-              {userProfileData.isFollowingYou && (
-                <FollowsYou>Follows you</FollowsYou>
-              )}
-            </HandleAndFollowsYouWrapper>
-            <Status>{userProfileData.bio}</Status>
-            <LocationAndDateWrapper>
-              <div>
-                <FiMapPin /> {userProfileData.location}
-              </div>
-              <DateJoined>
-                <FiCalendar /> {userProfileData.joined}
-              </DateJoined>
-            </LocationAndDateWrapper>
-            <NumFollowsAndFollowersWrapper>
-              <div>
-                <BoldSpan>{userProfileData.numFollowing}</BoldSpan> Following
-              </div>
-              <NumFollowers>
-                <BoldSpan>{userProfileData.numFollowers}</BoldSpan> Followers
-              </NumFollowers>
-            </NumFollowsAndFollowersWrapper>
-          </InfosDisplay>
-          <ProfileNavBar setDisplay={setDisplay} />
-          <NavbarRendering>
-            {display === "Tweet" && <ProfileTweets profileId={profileId} />}
-            {display === "Media" && <ProfileMedias />}
-            {display === "Likes" && <ProfileLikes />}
-          </NavbarRendering>
-        </ProfileWrapper>
-      ) : (
-        <div>Loading...</div>
-      )}
-    </>
-  );
-};
+const LoadingDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;

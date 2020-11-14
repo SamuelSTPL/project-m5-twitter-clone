@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { CurrentUserContext } from "./Global/CurrentUserContext";
 import { HomeFeedContext } from "./Global/HomeFeedContext";
 import { COLORS } from "./Global/constants";
+import { Icon } from "react-icons-kit";
+import { u1F63F } from "react-icons-kit/noto_emoji_regular/u1F63F";
 
 export const NewTweet = () => {
   const { currentUser } = useContext(CurrentUserContext);
@@ -17,7 +19,7 @@ export const NewTweet = () => {
     tweetPostError,
   } = useContext(HomeFeedContext);
 
-  console.log(tweetPostError);
+  // console.log(tweetPostError);
   return (
     <NewTweetContainer
       onSubmit={(e) => {
@@ -44,16 +46,25 @@ export const NewTweet = () => {
           disabled={remainingLetters <= 0 ? true : false}
         />
       </Bottom>
-      {tweetPostError && <div>Error</div>}
+      {tweetPostError && (
+        <ErrorDiv>
+          <ErrorIconSpan>
+            <Icon icon={u1F63F} size={50} />
+          </ErrorIconSpan>
+          We encountered a problem when trying to post your tweet. Please try
+          again!
+        </ErrorDiv>
+      )}
     </NewTweetContainer>
   );
 };
 
 const NewTweetContainer = styled.form`
+  margin-top: 15px;
   position: relative;
   border: 1px solid lightgray;
   min-width: 100%;
-  height: 200px;
+  min-height: 200px;
 `;
 
 const AvatarImg = styled.img`
@@ -76,7 +87,7 @@ const Input = styled.textarea`
 const Bottom = styled.div`
   position: absolute;
   right: 10px;
-  bottom: 10px;
+  top: 130px;
 `;
 
 const Button = styled.input`
@@ -100,4 +111,14 @@ const Span = styled.span`
       : prop.remainingLetters > 0
       ? "#CCCC00"
       : "#8B0000"};
+`;
+
+const ErrorDiv = styled.div`
+  margin-top: 70px;
+  text-align: center;
+  font-size: 1.3rem;
+`;
+
+const ErrorIconSpan = styled.span`
+  color: #8b0000;
 `;
