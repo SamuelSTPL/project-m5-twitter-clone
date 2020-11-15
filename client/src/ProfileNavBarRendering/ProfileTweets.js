@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   display: flex;
   padding: 25px;
   width: 100%;
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
 `;
 
 const Img = styled.img`

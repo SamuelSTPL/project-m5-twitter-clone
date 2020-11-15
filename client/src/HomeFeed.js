@@ -3,7 +3,7 @@ import { NewTweet } from "./NewTweet";
 import { TweetFeeds } from "./TweetFeeds";
 
 const Wrapper = styled.div`
-  max-width: 70%;
+  max-width: 100%;
   margin: 0 auto;
 `;
 

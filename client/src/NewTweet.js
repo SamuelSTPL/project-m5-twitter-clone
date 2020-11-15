@@ -63,7 +63,7 @@ const NewTweetContainer = styled.form`
   margin-top: 15px;
   position: relative;
   border: 1px solid lightgray;
-  min-width: 100%;
+  width: 100%;
   min-height: 200px;
 `;
 
@@ -82,6 +82,8 @@ const Input = styled.textarea`
   font-size: 1.5rem;
   width: 90%;
   height: 120px;
+  outline: none;
+  resize: none;
 `;
 
 const Bottom = styled.div`

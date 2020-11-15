@@ -8,6 +8,8 @@ const Wrapper = styled.ul`
   display: flex;
   justify-content: space-around;
   list-style: none;
+  border-top: 8px solid lightgray;
+  padding-top: 20px;
 `;
 
 const StyledNavLink = styled(NavLink)`

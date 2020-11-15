@@ -44,6 +44,10 @@ const ErrorIcon = styled.span`
   color: ${COLORS.primary};
 `;
 
+const MainContent = styled.div`
+  width: 80%;
+`;
+
 function App() {
   const { currentUser, status, hasEncounteredIternalError } = useContext(
     CurrentUserContext
@@ -79,23 +83,25 @@ function App() {
             <p>Please refresh the page</p>
           </ErrorDiv>
         ) : (
-          <Switch>
-            <Route exact path="/">
-              <HomeFeed />
-            </Route>
-            <Route path="/notifications">
-              <Notifications />
-            </Route>
-            <Route path="/bookmarks">
-              <Bookmarks />
-            </Route>
-            <Route path="/tweet/:tweetId">
-              <TweetDetails />
-            </Route>
-            <Route path="/:profileId">
-              <Profile />
-            </Route>
-          </Switch>
+          <MainContent>
+            <Switch>
+              <Route exact path="/">
+                <HomeFeed />
+              </Route>
+              <Route path="/notifications">
+                <Notifications />
+              </Route>
+              <Route path="/bookmarks">
+                <Bookmarks />
+              </Route>
+              <Route path="/tweet/:tweetId">
+                <TweetDetails />
+              </Route>
+              <Route path="/:profileId">
+                <Profile />
+              </Route>
+            </Switch>
+          </MainContent>
         )}
       </Wrapper>
     </Router>

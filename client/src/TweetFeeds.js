@@ -61,7 +61,7 @@ export const TweetFeeds = () => {
                 <p>@{tweet.author.handle}</p>
                 <TimeStamp>{newTimestamp}</TimeStamp>
               </Top>
-              <h4>{tweet.status}</h4>
+              <Status>{tweet.status}</Status>
               {tweet.media[0] && <Img src={tweet.media[0].url} />}
               <TweetActions tweet={tweet} />
             </Content>
@@ -78,8 +78,10 @@ export const TweetFeeds = () => {
 };
 
 const Wrapper = styled.div`
+  overflow: hidden;
   display: flex;
   padding: 25px;
+  padding-right: 0;
   width: 100%;
   border: 1px solid lightgray;
 `;
@@ -120,6 +122,10 @@ const TimeStamp = styled.span`
 
 const Content = styled.div`
   width: 100%;
+`;
+
+const Status = styled.span`
+  font-size: 1.5rem;
 `;
 const Top = styled.div`
   display: flex;
